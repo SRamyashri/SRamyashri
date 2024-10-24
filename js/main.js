@@ -215,6 +215,8 @@
   	/*---------------------------------------------------- */
 	/*	contact form
 	------------------------------------------------------ */
+	// Initialize EmailJS with your Public Key
+	emailjs.init('2SL6kQPk7iSFqD-Zt'); // Replace with your EmailJS Public Key
 
 	/* local validation */
 	$('#contactForm').validate({
@@ -223,48 +225,57 @@
 		submitHandler: function(form) {
 
 			var sLoader = $('#submit-loader');
+				sLoader.fadeIn();
+				emailjs.sendForm('service_no0qcbi', 'template_wetepnb', form)
+					.then(function() {
+						sLoader.fadeOut(); 
+						$('#message-warning').hide();
+						$('#contactForm').fadeOut();
+						$('#message-success').fadeIn(); 
+					}, function(error) {
+						sLoader.fadeOut(); 
+						$('#message-warning').html("Something went wrong. Please try again.");
+						$('#message-warning').fadeIn();
+					});
+		// 	$.ajax({      	
 
-			$.ajax({      	
+		//       type: "POST",
+		//       url: "inc/sendEmail.php",
+		//       data: $(form).serialize(),
+		//       beforeSend: function() { 
 
-		      type: "POST",
-		      url: "inc/sendEmail.php",
-		      data: $(form).serialize(),
-		      beforeSend: function() { 
+		//       	sLoader.fadeIn(); 
 
-		      	sLoader.fadeIn(); 
+		//       },
+		//       success: function(msg) {
 
-		      },
-		      success: function(msg) {
+	    //         // Message was sent
+	    //         if (msg == 'OK') {
+	    //         	sLoader.fadeOut(); 
+	    //            $('#message-warning').hide();
+	    //            $('#contactForm').fadeOut();
+	    //            $('#message-success').fadeIn();   
+	    //         }
+	    //         // There was an error
+	    //         else {
+	    //         	sLoader.fadeOut(); 
+	    //            $('#message-warning').html(msg);
+		//             $('#message-warning').fadeIn();
+	    //         }
 
-	            // Message was sent
-	            if (msg == 'OK') {
-	            	sLoader.fadeOut(); 
-	               $('#message-warning').hide();
-	               $('#contactForm').fadeOut();
-	               $('#message-success').fadeIn();   
-	            }
-	            // There was an error
-	            else {
-	            	sLoader.fadeOut(); 
-	               $('#message-warning').html(msg);
-		            $('#message-warning').fadeIn();
-	            }
+		//       },
+		//       error: function() {
 
-		      },
-		      error: function() {
+		//       	sLoader.fadeOut(); 
+		//       	$('#message-warning').html("Something went wrong. Please try again.");
+		//          $('#message-warning').fadeIn();
 
-		      	sLoader.fadeOut(); 
-		      	$('#message-warning').html("Something went wrong. Please try again.");
-		         $('#message-warning').fadeIn();
+		//       }
 
-		      }
-
-	      });     		
+	    //   });     		
   		}
 
 	});
-
-
  	/*----------------------------------------------------- */
   	/* Back to top
    ------------------------------------------------------- */ 
